@@ -1,0 +1,14 @@
+     1                                  %define value  [esp+08h] 
+     2                                  %define shift  [esp+0Ch]
+     3                                  %define return [esp+10h]
+     4                                  
+     5                                  [BITS 32]
+     6 00000000 8B442408                mov eax, dword value
+     7 00000004 8B4C240C                mov ecx, dword shift
+     8 00000008 8B542410                mov edx, dword return
+     9                                  
+    10 0000000C D3E0                    shl eax, cl
+    11                                  
+    12 0000000E 8902                    mov dword [edx], eax
+    13 00000010 31C0                    xor eax, eax		;hresult is returned in eax
+    14 00000012 C21000                  ret 10h			;if (eax == 0) then success
