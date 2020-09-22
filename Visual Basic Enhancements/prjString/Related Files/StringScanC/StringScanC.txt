@@ -1,0 +1,29 @@
+     1                                  %define string     [esp+0ch]
+     2                                  %define searchchar [esp+10h]
+     3                                  %define return 	   [esp+14h]
+     4                                  
+     5                                  [BITS 32]
+     6 00000000 56                      push esi
+     7 00000001 8B74240C                mov esi, dword string
+     8 00000005 8B542414                mov edx, dword return
+     9                                  
+    10 00000009 8B4EFC                  mov ecx, [esi-4]
+    11 0000000C 668B442410              mov ax, word searchchar
+    12                                  
+    13                                  Scan_Loop:
+    14 00000011 663B06                  cmp ax, word [esi]
+    15 00000014 740E                    je Found
+    16 00000016 81C602000000            add esi, 2
+    17 0000001C 81E902000000            sub ecx, 2
+    18 00000022 75ED                    jnz Scan_Loop
+    19                                  
+    20                                  Found:
+    21 00000024 2B74240C                sub esi, dword string
+    22 00000028 D1EE                    shr esi, 1
+    23 0000002A 46                      inc esi
+    24                                  
+    25 0000002B 8932                    mov dword [edx], esi
+    26                                  ExitMethod:
+    27 0000002D 31C0                    xor eax, eax		;hresult success = 0
+    28 0000002F 5E                      pop esi
+    29 00000030 C21000                  ret 10h
